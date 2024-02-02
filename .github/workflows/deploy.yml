@@ -1,0 +1,20 @@
+name: Deploy Laravel to Ubuntu
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  March of Alexander the Greate (Deployment):
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    steps:
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_DEV }}
+    - name: Deploy to Ubuntu
+      run: |
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@52.194.133.193 'cd /var/www/slap/Alexandros/ && chmod 775 deploy.sh && ./deploy.sh'
