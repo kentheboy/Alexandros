@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  March of Alexander the Greate - Deployment:
+  March_of_Alexander_the_Greate-Deployment:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
     steps:
