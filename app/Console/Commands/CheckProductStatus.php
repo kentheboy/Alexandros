@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Khufu\Product;
+use App\Models\Alexandros\Product;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
