@@ -9,7 +9,7 @@ use Illuminate\Routing\Controller as BaseController;
  /**
  * @OA\Info(
  *     version="1.0",
- *     title="Example for response examples value"
+ *     title="Product Management Tool BackEnd API Document"
  * )
  */
 
