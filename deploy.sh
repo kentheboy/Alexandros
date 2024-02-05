@@ -9,6 +9,8 @@ git pull
 
 echo "php artisan l5-swagger:generate"
 php artisan l5-swagger:generate
+echo "sudo chown -R $USER:www-data storage/api-docs"
+sudo chown -R $USER:www-data storage/api-docs
 
 echo "composer install --no-dev --optimize-autoloader"
 composer install --no-dev --optimize-autoloader
