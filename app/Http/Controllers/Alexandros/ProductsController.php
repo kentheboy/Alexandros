@@ -13,6 +13,9 @@ use App\Http\Requests\Alexandros\Product\CreateRequest;
 use App\Http\Resources\Alexandros\Product\ProductResource;
 use App\Models\Alexandros\Product;
 
+use Illuminate\Support\Facades\App;
+use App\Services\ImageService;
+
 class ProductsController extends Controller
 {
     public function create(CreateRequest $request){
@@ -101,6 +104,8 @@ class ProductsController extends Controller
      * )
      */
     public function index() {
+        $ImageService = App::make(ImageService::class);
+        $ImageService->loadTest();
         $products =  Product::all();
 
         // Get only first image's dataUrl
