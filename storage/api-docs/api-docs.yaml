@@ -1,30 +1,68 @@
-openapi: 3.0.0
+swagger: "2.0"
 info:
   title: 'Product Management Tool BackEnd API Document'
   version: '1.0'
 servers:
-  -
-    url: 'http://127.0.0.1:8000'
+  - url: 'http://127.0.0.1:8000'
+consumes:
+  - application/json
 paths:
   /api/products:
     get:
-      summary: 'Updates a user'
-      operationId: d12de6803e6268d496f390cc18681598
+      summary: 'Get list of Products'
+      operationId: products_read
+      tags:
+        - products
+      responses:
+        200:
+          description: 'OK'
+    post:
+      summary: 'Post new Product'
+      operationId: products_create
+      tags:
+        - products
       parameters:
-        -
-          name: id
-          in: path
-          description: 'Parameter with mutliple examples'
+        - name: body
+          in: body
+          description: Request Body
           required: true
           schema:
-            type: string
-          examples:
-            int:
-              summary: 'An int value.'
-              value: '1'
-            uuid:
-              summary: 'An UUID value.'
-              value: 0006faf6-7a61-426c-9034-579f2cfcfa83
+            $ref: '#/components/schemas/ProductsPostData'
       responses:
         200:
           description: OK
+components:
+  schemas:
+    ProductsPostData:
+      required:
+        - name
+        - price
+      type: object
+      properties:
+        name:
+          title: Product Name
+          type: string
+          maxLength: 255
+        description:
+          title: Product Description
+          type: string
+          maxLength: 500
+        price:
+          title: Product Price
+          type: number
+        images:
+          title: Images of Product
+          type: string
+          example: "[]"
+        start_date:
+          title: Publish Start Date
+          type: string
+          example: "2024-02-06"
+        end_date:
+          title: Publish End Date
+          type: string
+          example: "2025-02-06"
+        customfields:
+          title: CustomField to stor additional Product info 
+          type: string
+          example: "{\"passenger\":7,\"licenseNumber\":\"sdfg\",\"syakenDate\":\"\",\"tenkenDate\":\"\",\"isSmokingAllowed\":false}"
