@@ -18,6 +18,7 @@ use App\Services\ImageService;
 
 class ProductsController extends Controller
 {
+    
     public function create(CreateRequest $request){
 
         $name = $request->name;
