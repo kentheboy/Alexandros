@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/test', [ApiTestController::class, 'test']);
 
 // Alexandros ProductsTable
-Route::post('/products/create', [ProductsController::class, 'create']);
+Route::post('/products', [ProductsController::class, 'create']);
 Route::get('/products', [ProductsController::class, 'index']);
 Route::get('/products/{id}', [ProductsController::class, 'read']);
 Route::patch('/products/{id}', [ProductsController::class, 'update']);
