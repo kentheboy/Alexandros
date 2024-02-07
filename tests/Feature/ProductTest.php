@@ -20,7 +20,6 @@ class ProductTest extends TestCase
      */
     public function test_product_get_request(): void
     {
-        // $this->app->make('Illuminate\Config\Repository')->set('database.default', 'mysql_testing');
         
         Product::factory( count: 11 )->create();
 
