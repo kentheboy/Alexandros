@@ -63,6 +63,18 @@ return [
             ]) : [],
         ],
 
+        'mysql_testing' => [
+            'driver' => 'mysql',
+            'host' => env('TESTING_DB_HOST', 'localhost'),
+            'database' => env('TESTING_DB_DATABASE', 'forge'),
+            'username' => env('TESTING_DB_USERNAME', 'forge'),
+            'password' => env('TESTING_DB_PASSWORD', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
