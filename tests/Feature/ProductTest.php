@@ -16,7 +16,39 @@ class ProductTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * A basic feature test example.
+     * Product create request 
+     */
+    public function test_product_create_request(): void
+    {
+        $arrangedProductJson = [
+            'name' => 'TestProduct',
+            'description' => 'TestDescription',
+            'price' => 1000,
+            'customfields' => json_encode([
+                "passenger" => 7,
+                "licenseNumber" => "1234567890",
+                "syakenDate" => "2023-02-13",
+                "tenkenDate" => "2024-02-13",
+                "isSmokingAllowed" => 1
+            ])
+        ];
+
+        $response = $this->postJson('/api/products', $arrangedProductJson);
+
+        $response->assertStatus(201)
+                ->assertJson(fn (AssertableJson $json) => 
+                    $json->whereType('id', 'integer')
+                    ->where('name', 'TestProduct')
+                    ->where('description', 'TestDescription')
+                    ->where('price', 1000)
+                    ->where('status', 1)
+                    ->where('customfields', '{"passenger":7,"licenseNumber":"1234567890","syakenDate":"2023-02-13","tenkenDate":"2024-02-13","isSmokingAllowed":1}')
+                    ->etc()
+                );
+    }
+    
+    /**
+     * Product get request test
      */
     public function test_product_get_request(): void
     {
