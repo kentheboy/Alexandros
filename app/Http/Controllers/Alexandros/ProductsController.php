@@ -25,7 +25,7 @@ class ProductsController extends Controller
         $description = $request->description;
         $price = $request->price;
         $start_at = Carbon::parse($request->start_date);
-        $end_at = Carbon::parse($request->end_date);
+        $end_at = $request->end_date ? Carbon::parse($request->end_date) : null;
         $customfields = $request->customfields;
         $dataUrls = json_decode($request->images);
 
