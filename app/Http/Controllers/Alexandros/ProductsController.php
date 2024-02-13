@@ -30,13 +30,15 @@ class ProductsController extends Controller
         $dataUrls = json_decode($request->images);
 
         // Get the mime type and the data from the dataUrl
-        foreach ($dataUrls as $key => &$dataUrl) {
-
-            if (!isset($dataUrl) || empty($dataUrl)) {
-                continue;
+        if (isset($dataUrls) || !empty($dataUrls)) {
+            foreach ($dataUrls as $key => &$dataUrl) {
+    
+                if (!isset($dataUrl) || empty($dataUrl)) {
+                    continue;
+                }
+    
+                $dataUrl = $this->saveImageAndReturnFileName($dataUrl);
             }
-
-            $dataUrl = $this->saveImageAndReturnFileName($dataUrl);
         }
 
         // if today is before the start date or after the end date, switch status to false(currently unavailable)
