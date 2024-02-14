@@ -31,6 +31,13 @@ class ProductsController extends Controller
         $customfields = $request->customfields;
         $dataUrls = json_decode($request->images);
 
+        // check if the publish `start_date` is not overwrapping the `end_date`, oly if specified
+        if (isset($end_at) && $start_at->gt($end_at)) {
+            return response()->json([
+                'errors' => "publish dates are overwrapped",
+            ], 422);
+        }
+
         // if images is posted, Get the mime type and the data from the dataUrl
         if (isset($dataUrls) || !empty($dataUrls)) {
 

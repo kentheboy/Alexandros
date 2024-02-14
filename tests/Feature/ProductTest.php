@@ -138,6 +138,23 @@ class ProductTest extends TestCase
                     ->etc()
                 );
     }
+
+    /**
+     * Product create request with the `end_date` stated before `start_date`
+     */
+    public function test_product_create_request_with_invalid_publish_date_config() :void
+    {
+        $arrangedProductJson = [
+            'name' => 'TestProduct$response->$this',
+            'description' => 'TestDescription',
+            'price' => 1000,
+            'end_date' => '1999-02-23'
+        ];
+
+        $response = $this->postJson('/api/products', $arrangedProductJson);
+        dd($response);
+        $response->assertStatus(422);
+    }
     
     /**
      * Product get request test
