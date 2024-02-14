@@ -5,6 +5,8 @@ namespace App\Http\Requests\Alexandros\Product;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
+use App\Models\Alexandros\Product;
 
 class CreateRequest extends FormRequest
 {
@@ -37,6 +39,10 @@ class CreateRequest extends FormRequest
             'price' => [
                 'required',
                 'numeric'
+            ],
+            'status' => [
+                'sometimes',
+                Rule::in([Product::PUBLISHED, Product::UNPUBLISHED])
             ],
             'customfields' => [
                 'json',

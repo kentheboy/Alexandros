@@ -10,6 +10,10 @@ class Product extends Model
     use HasFactory;
     protected $table = 'products';
 
+    //product status
+    const PUBLISHED = 1;
+    const UNPUBLISHED = 0;
+
     protected $fillable = [
         'name',
         'description',
