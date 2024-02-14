@@ -86,6 +86,57 @@ class ProductTest extends TestCase
                     ->etc()
                 );
     }
+
+    /**
+     * Product create request with invalid forceful status input test
+     */
+    public function test_product_create_request_with_invalid_force_status() :void
+    {
+        $arrangedProductJson = [
+            'name' => 'TestProduct',
+            'description' => 'TestDescription',
+            'price' => 1000,
+            'status' => rand(2,10), //any number other than 0 and 1
+            'customfields' => json_encode([
+                "passenger" => 7,
+                "licenseNumber" => "1234567890",
+                "syakenDate" => "2023-02-13",
+                "tenkenDate" => "2024-02-13",
+                "isSmokingAllowed" => 1
+            ])
+        ];
+
+        $response = $this->postJson('/api/products', $arrangedProductJson);
+
+        $response->assertStatus(422); // The request was well-formed but was unable to be followed due to semantic errors.
+    }
+    
+    /**
+     * Product create request with forceful status input test
+     */
+    public function test_product_create_request_with_force_status() :void
+    {
+        $arrangedProductJson = [
+            'name' => 'TestProduct',
+            'description' => 'TestDescription',
+            'price' => 1000,
+            'status' => 0,
+            'customfields' => json_encode([
+                "passenger" => 7,
+                "licenseNumber" => "1234567890",
+                "syakenDate" => "2023-02-13",
+                "tenkenDate" => "2024-02-13",
+                "isSmokingAllowed" => 1
+            ])
+        ];
+
+        $response = $this->postJson('/api/products', $arrangedProductJson);
+
+        $response->assertStatus(201)
+                ->assertJson(fn (AssertableJson $json) =>
+                    $json->where('status', 0)
+                );
+    }
     
     /**
      * Product get request test
