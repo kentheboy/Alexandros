@@ -15,6 +15,7 @@ use App\Models\Alexandros\Product;
 
 use Illuminate\Support\Facades\App;
 use App\Services\ImageService;
+use Ramsey\Uuid\Type\Integer;
 
 class ProductsController extends Controller
 {
@@ -24,28 +25,27 @@ class ProductsController extends Controller
         $name = $request->name;
         $description = $request->description;
         $price = $request->price;
+        $status = isset($request->status) ? $request->status : null;
         $start_at = Carbon::parse($request->start_date);
         $end_at = $request->end_date ? Carbon::parse($request->end_date) : null;
         $customfields = $request->customfields;
         $dataUrls = json_decode($request->images);
 
-        // Get the mime type and the data from the dataUrl
+        // if images is posted, Get the mime type and the data from the dataUrl
         if (isset($dataUrls) || !empty($dataUrls)) {
-            foreach ($dataUrls as $key => &$dataUrl) {
-    
-                if (!isset($dataUrl) || empty($dataUrl)) {
-                    continue;
-                }
-    
-                $dataUrl = $this->saveImageAndReturnFileName($dataUrl);
-            }
+
+            $imageService = App::make(ImageService::class);
+            $dataUrls = $imageService->saveImages($dataUrls);
+            
         }
 
-        // if today is before the start date or after the end date, switch status to false(currently unavailable)
-        $status = 1;
-        $today = Carbon::today();
-        if (($start_at && $start_at->lte($today)) || ($end_at && $today->lte($end_at))) {
-            $status = 0;
+        if (!isset($status)) {
+            // if today is before the start date or after the end date, switch status to false(currently unavailable)
+            $status = 1;
+            $today = Carbon::today();
+            if (($start_at && $start_at->lte($today)) || ($end_at && $today->lte($end_at))) {
+                $status = 0;
+            }
         }
 
         $newProduct = Product::create([
@@ -107,8 +107,6 @@ class ProductsController extends Controller
      * )
      */
     public function index() {
-        $ImageService = App::make(ImageService::class);
-        $ImageService->loadTest();
         $products =  Product::all();
 
         // Get only first image's dataUrl

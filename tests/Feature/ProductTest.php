@@ -135,6 +135,7 @@ class ProductTest extends TestCase
         $response->assertStatus(201)
                 ->assertJson(fn (AssertableJson $json) =>
                     $json->where('status', 0)
+                    ->etc()
                 );
     }
     
