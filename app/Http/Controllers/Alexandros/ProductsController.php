@@ -50,7 +50,7 @@ class ProductsController extends Controller
             // if today is before the start date or after the end date, switch status to false(currently unavailable)
             $status = 1;
             $today = Carbon::today();
-            if (($start_at && $start_at->lte($today)) || ($end_at && $today->lte($end_at))) {
+            if (($start_at && $start_at->gt($today)) || ($end_at && $today->gt($end_at))) {
                 $status = 0;
             }
         }
@@ -69,8 +69,8 @@ class ProductsController extends Controller
         return $newProduct;
     }
 
-    public function read(Request $request){
-        $product = Product::find($request->id);
+    public function read(Product $product){
+        
         if (!isset($product['images']) || empty($product['images'])) {
             return $product;
         }
@@ -185,7 +185,7 @@ class ProductsController extends Controller
         $today = Carbon::today();
         if ($start_at || $end_at) {
             $status = 1;
-            if ($start_at->lte($today) || $today->lte($end_at)) {
+            if ($start_at->gt($today) || $today->gt($end_at)) {
                 $status = 0;
             }
             $product->update([
