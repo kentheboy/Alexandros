@@ -152,8 +152,28 @@ class ProductTest extends TestCase
         ];
 
         $response = $this->postJson('/api/products', $arrangedProductJson);
-        dd($response);
+
         $response->assertStatus(422);
+    }
+
+    /**
+     * Product read request with product id
+     */
+    public function test_product_read_request() :void
+    {
+
+    }
+
+    /**
+     * Product read request with un-existing product id
+     */
+    public function test_product_read_request_with_invalid_id() :void
+    {
+        $arrangedProductRecord = Product::factory()->create();
+
+        $response = $this->getJson('/api/products/' . $arrangedProductRecord->id + 1);
+
+        $response->assertStatus(404);
     }
     
     /**

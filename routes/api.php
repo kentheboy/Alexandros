@@ -26,7 +26,7 @@ Route::get('/test', [ApiTestController::class, 'test']);
 // Alexandros ProductsTable
 Route::post('/products', [ProductsController::class, 'create']);
 Route::get('/products', [ProductsController::class, 'index']);
-Route::get('/products/{id}', [ProductsController::class, 'read']);
+Route::get('/products/{product}', [ProductsController::class, 'read']);
 Route::patch('/products/{id}', [ProductsController::class, 'update']);
 Route::delete('/products/{id}', [ProductsController::class, 'delete']);
 
