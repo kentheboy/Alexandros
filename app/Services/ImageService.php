@@ -18,7 +18,7 @@ class ImageService {
      * @return array
      */
     public function saveImages(Array $dataUrls) {
-        foreach ($dataUrls as $key => $dataUrl) {
+        foreach ($dataUrls as $key => &$dataUrl) {
 
             if (!isset($dataUrl) || empty($dataUrl)) {
                 continue;
