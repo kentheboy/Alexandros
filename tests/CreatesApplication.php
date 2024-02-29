@@ -16,6 +16,8 @@ trait CreatesApplication
 
         $app->make(Kernel::class)->bootstrap();
 
+        $app->make('Illuminate\Config\Repository')->set('database.default', 'mysql_testing');
+
         return $app;
     }
 }
