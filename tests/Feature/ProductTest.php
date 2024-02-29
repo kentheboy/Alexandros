@@ -9,6 +9,8 @@ use Tests\TestCase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Http\Client\Exception\RequestException;
+use Illuminate\Support\Facades\Http;
 
 use Illuminate\Support\Facades\Log;
 
@@ -161,7 +163,28 @@ class ProductTest extends TestCase
      */
     public function test_product_read_request() :void
     {
+        $arrangedProductId = $this->create_product_with_image_http_request();
 
+        $response = $this->getJson('/api/products/' . $arrangedProductId);
+        
+        $statusArray = [0, 1, 2];
+        $response->assertJson(fn (AssertableJson $json) => 
+            $json->whereType('id', 'integer')
+            ->whereType('name', 'string|null')
+            ->whereType('description', 'string|null')
+            ->whereType('price', 'integer')
+            ->where('status', fn(int $status) => in_array($status, $statusArray))
+            ->whereType('start_at', 'string')
+            ->whereType('end_at', 'string|null')
+            ->whereType('customfields', 'string')
+            ->where('images', fn (string $imageJson) => 
+                count(json_decode($imageJson)) == 2
+            )
+            ->where('images', fn (string $imageJson) => $this->is_images_accessibility($imageJson))
+            ->whereType('updated_at', 'string')
+            ->whereType('created_at', 'string')
+            ->etc()
+    );
     }
 
     /**
@@ -208,6 +231,51 @@ class ProductTest extends TestCase
                 //     'customfields'
                 // ])
         );
+    }
+
+    private function create_product_with_image_http_request() {
+        $jpegTestFilePath = "./tests/salmplefiles/alexandros.jpg";
+        $pngTestFilePath = "./tests/salmplefiles/alexandros.png";
+        $arrangedProductJson = [
+            'name' => 'TestProduct',
+            'description' => 'TestDescription',
+            'price' => 1000,
+            'images' => json_encode([
+                'image/jpeg;base64,' . base64_encode(file_get_contents($jpegTestFilePath)),
+                'image/png;base64,' . base64_encode(file_get_contents($pngTestFilePath)),
+            ]),
+            'customfields' => json_encode([
+                "passenger" => 7,
+                "licenseNumber" => "1234567890",
+                "syakenDate" => "2023-02-13",
+                "tenkenDate" => "2024-02-13",
+                "isSmokingAllowed" => 1
+            ])
+        ];
+
+        $response = $this->postJson('/api/products', $arrangedProductJson);
+
+        return $response->baseResponse->original->id;
+    }
+
+    private function is_images_accessibility(string $images) {
+        $images = json_decode($images);
+        foreach ($images as $url) {
+            Log::info($url);
+            try {
+                $result = Http::get($url);
+            } catch (RequestException) {
+                Log::info("failed");
+                return false;
+            }
+            
+            if ($result->failed() || $result->status() === 404) {
+                Log::info("failed2");
+                return false;
+            }
+        }
+        Log::info("test");
+        return true;
     }
     
 }
