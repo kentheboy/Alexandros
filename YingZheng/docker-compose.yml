@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Laravel application service
+  app:
+    build:
+      context: ..
+      dockerfile: ./YingZheng/Dockerfile
+    container_name: Alexandros
+    ports:
+      - "8001:80" # Bind localhost:8000 to container port 80
+    volumes:
+      - ../:/var/www/html # Sync Laravel project files with container
+    # depends_on:
+      # Remove mysql from depends_on since it's no longer needed
+      # - mysql
+    networks:
+      - laravel
+
+  # MySQL database service (Remove the MySQL service for now)
+  # mysql:
+  #   image: mysql:5.7
+  #   container_name: mysql-db
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_DATABASE: laravel
+  #     MYSQL_USER: laravel
+  #     MYSQL_PASSWORD: secret
+  #     MYSQL_ROOT_PASSWORD: rootsecret
+  #   volumes:
+  #     - dbdata:/var/lib/mysql
+  #   networks:
+  #     - laravel
+
+# Networks
+networks:
+  laravel:
+    driver: bridge
